@@ -314,9 +314,9 @@ export default function HomePage() {
 
     const matchesSearch =
       searchText === "" ||
-      item.name.toLowerCase().includes(searchText) ||
-      item.description.toLowerCase().includes(searchText) ||
-      item.category.toLowerCase().includes(searchText);
+      String(item.name ?? "").toLowerCase().includes(searchText) ||
+String(item.description ?? "").toLowerCase().includes(searchText) ||
+String(item.category ?? "").toLowerCase().includes(searchText)
 
     const matchesCategory =
       selectedCategory === "All" ||
@@ -570,13 +570,13 @@ export default function HomePage() {
               gap: "22px",
             }}
           >
-            {filteredItems.map((item) => {
+            {filteredItems.map((item, index) => {
               const images = getImages(item.imageData);
               const mainImage = images[0];
 
               return (
                 <div
-                  key={item.id}
+                  key={`${item.id}-${index}`}
                   style={{
                     background: "#ffffff",
                     border: "1px solid #e5e7eb",
@@ -735,7 +735,10 @@ export default function HomePage() {
                     </div>
 
                     <button
-                      onClick={() => openItem(item)}
+                      onClick={() => {
+  localStorage.setItem("collegeLoopSelectedItem", JSON.stringify(item));
+  window.location.href = "/product";
+}}
                       style={{
                         width: "100%",
                         padding: "11px",
